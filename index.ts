@@ -3,7 +3,7 @@ import "dotenv/config"
 import { websocketServer } from "./src/ws_server/ws-server";
 
 const HTTP_PORT = +process.env.APP_PORT|| 8181;
-const WS_PORT = +process.env.WSS_PORT|| 8080;
+const WS_PORT = +process.env.WSS_PORT|| 3000;
 
 
 httpServer.listen(HTTP_PORT)

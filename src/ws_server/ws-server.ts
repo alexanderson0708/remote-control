@@ -4,9 +4,9 @@ import {RemoteControl} from "./remote-control";
 
 
 interface CommandsMap{
-    [index:string]: (width:number, length:number) => Promise<CommandResponse> | Promise<void> 
+    [index:string]: (width:number, length:number) => Promise<Response> | Promise<void> 
 }
-interface CommandResponse{
+interface Response{
     data:string,
     type?:string
 }
@@ -21,9 +21,6 @@ export class websocketServer {
                 console.log('received: %s', data)
                 const response = await startCommands(data.toString())
                 const msg = response ? response.data : ''
-        
-                console.log(`${msg}`);
-                
                 duplex.write(`${data.toString().split(' ')[0]} ${msg}`)
             })
             duplex.on('close',()=>{
@@ -43,12 +40,10 @@ export const startCommands = (command:string) => {
         'mouse_right': async(coords:number) => {remoteControl.mouseMove('right', coords)},
         'mouse_up': async(coords:number) => {remoteControl.mouseMove('up', coords)},
         'mouse_down':async(coords:number) => {remoteControl.mouseMove('down', coords)},
-
         'draw_rectangle': async(width:number, length:number) => {remoteControl.drawRectangle('draw_rectangle', width, length)},
         'draw_circle': async(radius:number) => {remoteControl.drawCircle('draw_circle', radius)},
         'draw_square':async(width:number) => {remoteControl.drawSquare('draw_square', width)},
-
-        'print_screen':async() => ({data:await remoteControl.printScreen('print_screen')}),
+        'prnt_scrn': async() => ({data: await remoteControl.printScreen('prnt_scrn')}),
     }
     if (Object.keys(commands).includes(cmd)){
         return commands[cmd](+width, +length)

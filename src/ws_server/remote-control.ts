@@ -73,13 +73,8 @@ export class RemoteControl{
 
     public async printScreen(command:string){
         const pos = await mouse.getPosition()
-        console.log(pos);
-        console.log(111111);
-        
         const img = await screen.grabRegion(new Region(pos.x, pos.y, 200, 200))
         const imgData = await new Jimp(await img.toRGB()).getBase64Async(Jimp.MIME_PNG)
-        // console.log(imgData);
-        
         return imgData.replace('data:image/png;base64,','')
     }
 }
