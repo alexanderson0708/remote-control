@@ -20,7 +20,7 @@ export class RemoteControl{
 
     public async mouse_pos(command:string){
         const pos = await mouse.getPosition()
-        return `"${command}" x: ${pos.x}px, y: ${pos.y}px`
+        return `${pos.x}px,${pos.y}px`
     }
 
     public async drawSquare(command:string, width:number){
@@ -44,10 +44,10 @@ export class RemoteControl{
         const {x,y} = await mouse.getPosition()
         await mouse.releaseButton(Button.LEFT)
         await mouse.pressButton(Button.LEFT)
-        for (let i=1; i<=360; i++){
+        for (let i=0; i<=360; i++){
             const radians = (Math.PI/180) * i
             const cx = radius * Math.cos(radians) + x - radius
-            const cy = radius * Math.sin(radians) + x
+            const cy = radius * Math.sin(radians) + y
             await mouse.move(straightTo(new Point(cx, cy)))
         }
         await mouse.releaseButton(Button.LEFT)
@@ -73,9 +73,13 @@ export class RemoteControl{
 
     public async printScreen(command:string){
         const pos = await mouse.getPosition()
+        console.log(pos);
+        console.log(111111);
+        
         const img = await screen.grabRegion(new Region(pos.x, pos.y, 200, 200))
-
         const imgData = await new Jimp(await img.toRGB()).getBase64Async(Jimp.MIME_PNG)
+        // console.log(imgData);
+        
         return imgData.replace('data:image/png;base64,','')
     }
 }
